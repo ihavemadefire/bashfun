@@ -1,0 +1,42 @@
+#!/bin/bash
+
+
+function moonphase {
+    if [ $1 = 0 ] ; then
+	phasename="new"
+    elif [ $1 -lt 50 ] ; then
+	phasename="crescent"
+    elif [ $1 = 50 ] ; then
+	phasename="half"
+    elif [ $1 -lt 99 ] ; then                                                                                                            	phasename="gibbous"
+    else
+	phasename="full"
+    fi
+    echo "$phasename"
+    }
+
+if [ $# -eq 0 ] ; then
+   thedate="today"
+else
+	mon="$(echo $1 | cut -d/ -f1)"
+	day="$(echo $1 | cut -d/ -f2)"
+	year="$(echo $1 | cut -d/ -f3)"
+
+if [ -z "$year" -o -z "$day" ] ; then
+   echo "Error: valid date format is MM/DD/YYYY"
+   fi
+   thedate="$1"
+fi
+url="http://www.moongiant.com/phase/$thedate"
+pattern="Illumination:"
+
+phase="$( curl -sL "$url" | grep "$pattern" | tr ',' '\
+	  ' | grep "$pattern" | sed 's/[^0-9]//g')"
+
+if [ "$thedate" = "today" ] ; then
+   echo "Today the moon is in the $(moonphase ${phase}) phase."
+else
+	echo "On $thedate the moon is in the $(moonphase ${phase}) phase."
+fi
+
+exit 0
