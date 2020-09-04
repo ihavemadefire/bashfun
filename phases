@@ -1,5 +1,12 @@
 #!/bin/bash
+# phases--Reports the name of the phase of the moon
+# The script accepts 1 argument: a date in format MM/DD/YYYY
+# if no date is provided it defaults to today's date
 
+###############################################
+#  this function converts the percentage of   #
+# illumination into a text value of the phase #
+###############################################
 
 function moonphase {
     if [ $1 = 0 ] ; then
@@ -15,6 +22,10 @@ function moonphase {
     echo "$phasename"
     }
 
+###############################################
+#   parsing and validating the input value    #
+###############################################
+
 if [ $# -eq 0 ] ; then
    thedate="today"
 else
@@ -27,11 +38,24 @@ if [ -z "$year" -o -z "$day" ] ; then
    fi
    thedate="$1"
 fi
+
+###############################################
+#         defining text as variables          #
+###############################################
+
 url="http://www.moongiant.com/phase/$thedate"
 pattern="Illumination:"
 
+###############################################
+#      curl then parse website for date       #
+###############################################
+
 phase="$( curl -sL "$url" | grep "$pattern" | tr ',' '\
 	  ' | grep "$pattern" | sed 's/[^0-9]//g')"
+
+###############################################
+#   printing output after function bounce     #
+###############################################
 
 if [ "$thedate" = "today" ] ; then
    echo "Today the moon is in the $(moonphase ${phase}) phase."
