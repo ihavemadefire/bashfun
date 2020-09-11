@@ -1,0 +1,23 @@
+#!/bin/bash
+# This file calls an api and returns a Ron Swanson Quote 
+
+########################################
+# Parse and Validate input: 1 argument #
+########################################
+
+if [ $# -eq 1 -a $1 == 'Swanson' ] ; then
+    
+    QUOTE=$(curl -s https://ron-swanson-quotes.herokuapp.com/v2/quotes | cut -d'"'\
+ -f2)
+    echo $QUOTE
+    
+#########################################
+# Parse and Validate input: 2 arguments #
+    #########################################
+    
+elif [ $# -eq 2 -a $1 == 'Swanson' ] ; then
+    QUOTE=$(curl -s https://ron-swanson-quotes.herokuapp.com/v2/quotes/$2 )
+    echo $QUOTE | tr '"' "\n" 
+    fi
+
+exit 0
